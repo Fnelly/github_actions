@@ -20,9 +20,16 @@ jobs:
 
       - name: Run tests
         run: |
-          pwd
-          ls -la
-          find . -maxdepth 4 -type f -name "test_*.py" -o -name "*_test.py" || true
+              pwd
+              ls -la
+              echo "Fichiers de test trouvés par find:"
+              find . -maxdepth 4 -type f -name "test_*.py" -o -name "*_test.py" || true
+              echo "Fichiers de test suivis par git:"
+              git ls-files 'tests/test_*.py' 'test_*.py' || true
+              echo "Fichiers contenant 'def test_' :"
+              grep -R --files-with-matches "def test_" . || true
+              echo "Ce que pytest collecte (--collect-only):"
+              pytest --collect-only -q || true
           if git ls-files 'tests/test_*.py' 'test_*.py' '*_test.py' | grep -q .; then
             pytest
           else
