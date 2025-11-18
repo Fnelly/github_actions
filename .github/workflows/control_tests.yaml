@@ -20,7 +20,11 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest
+          if git ls-files 'tests/test_*.py' 'test_*.py' | grep -q .; then
+            pytest
+          else
+            echo "Aucun test trouvé ; pytest ignoré"
+          fi
 
       - name: Run flake8
         uses: py-actions/flake8@v2
